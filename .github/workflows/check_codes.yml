@@ -2,7 +2,7 @@ name: Tarkov PvE Code Notifier
 
 on:
   schedule:
-    - cron: '4,19,34,49 * * * *'
+   - cron: '0 */4 * * *'
   workflow_dispatch:
 
 permissions:
