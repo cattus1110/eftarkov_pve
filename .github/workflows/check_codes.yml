@@ -1,0 +1,44 @@
+name: Tarkov PvE Code Notifier
+
+on:
+  schedule:
+    - cron: '4,19,34,49 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: eftarkov-pve
+  cancel-in-progress: false
+
+jobs:
+  check-codes:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 2
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+
+      - name: Run Notifier Script
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: node webhook_eftarkov.js
+
+      - name: Commit and Push changes
+        run: |
+          if [[ -n $(git status --porcelain eftarkov_pve_codes.json) ]]; then
+            git config --local user.email "actions@github.com"
+            git config --local user.name "GitHub Actions"
+            git add eftarkov_pve_codes.json
+            git commit -m "chore: update codes [skip ci]"
+            git pull --rebase origin main
+            git push
+          fi
