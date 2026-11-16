@@ -1,0 +1,27 @@
+name: Tarkov PvE Code Notifier
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  check-codes:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm install && npx playwright install chromium --with-deps
+      - env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: node webhook_eftarkov.js
+      - run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+          git add eftarkov_pve_codes.json
+          git diff --staged --quiet || (git commit -m "chore: update codes" && git push)
