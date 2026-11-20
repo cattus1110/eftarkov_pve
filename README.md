@@ -65,7 +65,7 @@
 | 常數 | 預設 | 說明 |
 |---|---|---|
 | `INCLUDE_UNSPECIFIED_MODE` | `true` | 說明沒標明 PVE／PVP 的序號是否也推送。設為 `false` 則只推說明明確寫有 PVE 的 |
-| `MAX_EXPIRED_VOTES` | `100` | 社群「過期」票數達此值就不推送。網站在 200 票時會下架該序號；想不過濾可設為 `Infinity` |
+| `MAX_EXPIRED_VOTES` | `200` | 社群「過期」票數達此值就不推送。網站在 200 票時會下架該序號；想不過濾可設為 `Infinity` |
 | `SILENT_FIRST_RUN` | `true` | 紀錄檔不存在時只建立基準、不推送 |
 | `KEEP_DAYS` | `7` | 序號從頁面消失後，紀錄再保留幾天才清除 |
 | `MAX_ENTRIES` | `200` | 紀錄檔最多保留幾筆 |
