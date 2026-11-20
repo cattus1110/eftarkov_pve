@@ -1,0 +1,56 @@
+# 逃離塔科夫 PvE 兌換碼通知：定時抓 eftarkov.com，有新序號就推送到 Discord
+name: Tarkov PvE Code Notifier
+
+on:
+  schedule:
+    - cron: '0 */4 * * *' # 每 4 小時一次（UTC）
+  workflow_dispatch: # 允許在 Actions 頁面手動觸發
+
+# 需要寫入權限，才能把紀錄檔 commit 回 repo
+permissions:
+  contents: write
+
+# 同一時間只跑一個；後來的排隊而不是取消，避免兩個 job 同時改紀錄檔造成衝突
+concurrency:
+  group: eftarkov-pve
+  cancel-in-progress: false
+
+jobs:
+  check-codes:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5 # 正常 10 秒內結束；留餘裕給重試與限流等待，卡住時不會白白耗用額度
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 1 # 只抓最新一個 commit，不下載歷史
+          # 只取出需要的兩個檔案，省下其餘檔案的下載與寫入時間
+          sparse-checkout: |
+            webhook_eftarkov.js
+            eftarkov_pve_codes.json
+          sparse-checkout-cone-mode: false # 用「檔案」而非「資料夾」方式比對
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: '24' # 內建 fetch，沒有 npm 相依套件，不需要安裝或快取
+
+      - name: Run Notifier Script
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: node webhook_eftarkov.js
+
+      - name: Commit and Push changes
+        # 就算上一步部分失敗（例如有幾則 Discord 發送失敗）也要執行，
+        # 這樣已成功通知的序號仍會被保存，下次不會重複推送；手動取消時才跳過
+        if: ${{ !cancelled() }}
+        run: |
+          # 紀錄檔有變動（或首次新增）才 commit，否則這一步幾乎瞬間結束
+          if [[ -n $(git status --porcelain eftarkov_pve_codes.json) ]]; then
+            git config --local user.email "actions@github.com"
+            git config --local user.name "GitHub Actions"
+            git add eftarkov_pve_codes.json
+            git commit -m "chore: update codes [skip ci]"
+            git pull --rebase # 不寫死分支名稱，main / master 都適用
+            git push
+          fi
