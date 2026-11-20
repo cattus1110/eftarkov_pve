@@ -1,5 +1,7 @@
 # 逃離塔科夫 PvE 兌換碼通知
 
+[![Tarkov PvE Code Notifier](https://github.com/cattus1110/eftarkov_pve/actions/workflows/check_codes.yml/badge.svg)](https://github.com/cattus1110/eftarkov_pve/actions/workflows/check_codes.yml)
+
 定時抓取 [逃離塔科夫中文 Wiki](https://www.eftarkov.com/) 首頁的「最新兌換碼」，發現新的 **PvE 可用序號**就推送到 Discord。以 GitHub Actions 執行，不需要伺服器，也不需要安裝任何 npm 套件。
 
 ## 功能
