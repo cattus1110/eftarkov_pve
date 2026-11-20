@@ -1,7 +1,20 @@
 {
-  "name": "tarkov-pve-webhook",
+  "name": "eftarkov_pve",
   "version": "1.0.0",
-  "dependencies": {
-    "playwright": "^1.48.0"
-  }
+  "description": "逃離塔科夫 PvE 兌換碼通知：定時抓取 eftarkov.com 的最新兌換碼，推送新的 PvE 序號到 Discord",
+  "main": "webhook_eftarkov.js",
+  "scripts": {
+    "start": "node webhook_eftarkov.js",
+    "check": "node --check webhook_eftarkov.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cattus1110/eftarkov_pve.git"
+  },
+  "keywords": ["tarkov", "escape-from-tarkov", "discord", "webhook", "github-actions"],
+  "license": "MIT",
+  "private": true
 }
