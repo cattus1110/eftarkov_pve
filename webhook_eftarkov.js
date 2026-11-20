@@ -20,7 +20,7 @@ const REDEEM_URL = 'https://www.escapefromtarkov.com/promo/activate';
 const INCLUDE_UNSPECIFIED_MODE = true;
 
 // 社群「過期」票數達此值就不推送（網站在 200 票時會下架該序號）
-const MAX_EXPIRED_VOTES = 100;
+const MAX_EXPIRED_VOTES = 200;
 
 // true = 紀錄檔不存在時（第一次執行），只把目前序號記下來當基準、不推送，避免舊碼洗版
 const SILENT_FIRST_RUN = true;
