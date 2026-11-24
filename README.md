@@ -27,7 +27,7 @@
 .
 ├── .github/
 │   └── workflows/
-│       └── tarkov-pve-notifier.yml   # 排程設定
+│       └── check_codes.yml   # 排程設定
 ├── webhook_eftarkov.js               # 主程式
 ├── eftarkov_pve_codes.json           # 已通知的序號紀錄（自動產生，請勿手動編輯）
 └── README.md
